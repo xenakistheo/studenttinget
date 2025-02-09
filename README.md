@@ -39,3 +39,11 @@
    ```bash
    pip install -r requirements.txt
    ```
+
+## Running the Application
+
+```bash
+ .venv/bin/uvicorn main:app --reload
+```
+
+Open a web browser and go to `http://localhost:8000/docs`.
