@@ -9,7 +9,7 @@ supabase = create_supabase_client()
 #companies -> databaseDEMO
 
 @router.get("/")
-def get_companies():
+def get_cases():
     try:
         response = supabase.table("databaseDEMO").select("*").execute()
 
@@ -30,10 +30,10 @@ def get_companies():
         return None
 
 @router.get("/{case_id}")
-def get_company(case_id: int):
+def get_case(case_id: int):
 
     try:
-        response = supabase.table("databaseDEMO").select("*").eq("saksnummer", case_id).execute()
+        response = supabase.table("databaseDEMO").select("*").eq("id", case_id).execute()
         if hasattr(response, "error") and response.error:
             logging.error(f"Error fetching case: {response.error}")
             raise HTTPException(status_code=500, detail=response.error.message)
@@ -42,7 +42,7 @@ def get_company(case_id: int):
             return response.data[0]
         
         logging.warning(f"Case with ID {case_id} not found")
-        raise HTTPException(status_code=404, detail="Company not found")
+        raise HTTPException(status_code=404, detail="Case not found")
     
     except Exception as e:
         logging.error(f"Unhandled exception while fetching case: {e}")
@@ -50,7 +50,7 @@ def get_company(case_id: int):
 
 
 @router.post("/")
-def create_company(case: dict):
+def create_case(case: dict):
 
     try:
         response = supabase.table("databaseDEMO").insert(case).execute()
@@ -66,7 +66,7 @@ def create_company(case: dict):
 
 
 @router.delete("/{case_id}")
-def delete_company(case_id: int):
+def delete_case(case_id: int):
 
     try:
         response = supabase.table("databaseDEMO").delete().eq("saksnummer", case_id).execute()
@@ -85,7 +85,7 @@ def delete_company(case_id: int):
         raise HTTPException(status_code=500, detail=f"An error occurred while deleting the case: {str(e)}")
     
 @router.patch("/{case_id}")
-def update_company(case_id: int, case_update: VedtakSchema):
+def update_case(case_id: int, case_update: VedtakSchema):
     """
     Update a company's details by its ID.
     """
