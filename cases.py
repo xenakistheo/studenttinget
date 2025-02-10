@@ -2,6 +2,7 @@ from fastapi import APIRouter, HTTPException
 from supabase_client import create_supabase_client
 from models import VedtakSchema
 import logging
+from typing import Optional
 
 router = APIRouter()
 supabase = create_supabase_client()
@@ -28,6 +29,45 @@ def get_cases():
     except Exception as e:
         print("Unhandled exception while fetching cases:", e)
         return None
+
+
+
+@router.get("/get_query")
+def get_query(
+    keywords: Optional[str] = None,
+    casenr: Optional[str] = None,
+    year: Optional[int] = None,
+    category: Optional[str] = None,
+    archived: Optional[bool] = None
+):
+    """Fetch legislations with optional filtering from Supabase"""
+
+    query = supabase.table("databaseDEMO").select("*")
+
+    # Apply filters dynamically
+    if keywords:
+        query = query.ilike("sakstittel", f"%{keywords}%")  # Case-insensitive search
+
+    if casenr:
+        query = query.eq("saksnummer", casenr)
+
+    if year:
+        query = query.eq("aarstall", year)  # Use `in_` for multiple years
+
+    if category and category != "Alle":
+        query = query.eq("category", category)
+    
+    #if archived is not None:
+    #    # Assuming archived = legislations older than 5 years
+    #    query = query.lt("year", 2020) if archived else query.gte("year", 2020)
+
+    # Execute the query
+    response = query.execute()
+    
+    # Extract the data
+    results = response.data if response.data else []
+
+    return results
 
 @router.get("/{case_id}")
 def get_case(case_id: int):

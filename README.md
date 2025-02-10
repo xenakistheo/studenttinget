@@ -45,5 +45,9 @@
 ```bash
  .venv/bin/uvicorn main:app --reload
 ```
+For debugging of API, open a web browser and go to `http://localhost:8000/docs`.
 
-Open a web browser and go to `http://localhost:8000/docs`.
+```bash
+ streamlit run frontend.py
+```
+Open a webbrowser and go to to 'http://localhost:8501'.
