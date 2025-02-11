@@ -10,6 +10,10 @@ YEAR = datetime.now().year
 NS = "(\frac{\partial} {\partial t} + \mathbf{v} \cdot\nabla)\mathbf{v} = \frac{-\nabla p}{\rho} + \nu\nabla^2 \mathbf{v} + \mathbf{f}"
 EULER = "e^{i\pi} + 1 = 0"
 
+st.set_page_config(page_title="STi - Vedtak", page_icon="📰")
+
+st.sidebar.success("Select a page above to navigate.")  # Sidebar message
+
 st.title("Studenttingets Vedtaksdatabase")
 
 left_column, right_column = st.columns(2)
